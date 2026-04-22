@@ -11,11 +11,18 @@
         </strong>
     </div>
     <div class="block-content" aria-labelledby="block-ots-request-heading">
-        <form class="form form-login"
-              action="#"
-              method="post"
-              id="ots-request-form"
-              data-mage-init='{"validation":{}}'>
+        <div class="form form-login"
+             id="ots-request-form"
+             data-ots-login='{
+                 "graphQlUrl":"<?= $block->escapeHtmlAttr($block->getUrl('graphql')) ?>",
+                 "accountUrl":"<?= $block->escapeHtmlAttr($block->getUrl('customer/account')) ?>",
+                 "emailStepNote":"<?= $block->escapeHtmlAttr(__('Enter your email address to receive a one time code.')) ?>",
+                 "passcodeStepNote":"<?= $block->escapeHtmlAttr(__('Enter the passcode sent to your email address.')) ?>",
+                 "getCodeLabel":"<?= $block->escapeHtmlAttr(__('Get Code')) ?>",
+                 "loginLabel":"<?= $block->escapeHtmlAttr(__('Login with Passcode')) ?>",
+                 "requestErrorMessage":"<?= $block->escapeHtmlAttr(__('Unable to request a one time code right now.')) ?>"
+             }'
+             data-mage-init='{"validation":{}}'>
             <?= $block->getBlockHtml('formkey') ?>
             <fieldset class="fieldset login" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>">
                 <div class="field note" id="ots-form-note">
@@ -51,137 +58,19 @@
                 </div>
                 <div class="actions-toolbar">
                     <div class="primary">
-                        <button type="submit" class="action login primary" name="send" id="send-ots-code">
+                        <button type="button" class="action login primary" name="send" id="send-ots-code">
                             <span id="ots-submit-label"><?= $block->escapeHtml(__('Get Code')) ?></span>
                         </button>
                     </div>
                 </div>
             </fieldset>
-        </form>
+        </div>
     </div>
 </div>
-<script>
-    require(['jquery', 'mage/validation'], function ($) {
-        const form = document.getElementById('ots-request-form');
-        const messages = document.getElementById('ots-request-messages');
-        const submitButton = document.getElementById('send-ots-code');
-        const submitLabel = document.getElementById('ots-submit-label');
-        const note = document.getElementById('ots-form-note');
-        const emailField = document.getElementById('ots-email-field');
-        const emailInput = document.getElementById('ots-email');
-        const hiddenEmailInput = document.getElementById('ots-submitted-email');
-        const passcodeField = document.getElementById('ots-passcode-field');
-        const passcodeInput = document.getElementById('ots-passcode');
-        const graphQlUrl = '<?= $block->escapeJs($block->getUrl('graphql')) ?>';
-        const accountUrl = '<?= $block->escapeJs($block->getUrl('customer/account')) ?>';
-        let isPasscodeStep = false;
-
-        const renderMessage = (text, type) => {
-            messages.style.display = 'block';
-            messages.replaceChildren();
-
-            const wrapper = document.createElement('div');
-            wrapper.className = 'message ' + type;
-
-            const content = document.createElement('div');
-            content.textContent = text;
-
-            wrapper.appendChild(content);
-            messages.appendChild(wrapper);
-        };
-
-        const restoreEmailStep = () => {
-            isPasscodeStep = false;
-            hiddenEmailInput.value = '';
-            emailField.style.display = '';
-            emailInput.disabled = false;
-            emailInput.setAttribute('data-validate', '{required:true, \'validate-email\':true}');
-            passcodeField.style.display = 'none';
-            passcodeInput.disabled = true;
-            passcodeInput.value = '';
-            passcodeInput.removeAttribute('data-validate');
-            note.textContent = '<?= $block->escapeJs(__('Enter your email address to receive a one time code.')) ?>';
-            submitLabel.textContent = '<?= $block->escapeJs(__('Get Code')) ?>';
-        };
-
-        const switchToPasscodeStep = (email) => {
-            isPasscodeStep = true;
-            hiddenEmailInput.value = email;
-            emailField.style.display = 'none';
-            emailInput.value = '';
-            emailInput.disabled = true;
-            emailInput.removeAttribute('data-validate');
-            passcodeField.style.display = '';
-            passcodeInput.disabled = false;
-            passcodeInput.setAttribute('data-validate', '{required:true}');
-            note.textContent = '<?= $block->escapeJs(__('Enter the passcode sent to your email address.')) ?>';
-            submitLabel.textContent = '<?= $block->escapeJs(__('Login with Passcode')) ?>';
-            passcodeInput.focus();
-        };
-
-        passcodeInput.disabled = true;
-
-        form.addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-            if (!form.reportValidity() || !$(form).validation('isValid')) {
-                return;
-            }
-
-            submitButton.disabled = true;
-            messages.style.display = 'none';
-
-            try {
-                const response = await fetch(graphQlUrl, {
-                    method: 'POST',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(
-                        isPasscodeStep
-                            ? {
-                                query: 'mutation LoginWithOts($email: String!, $passcode: String!) { loginWithOts(email: $email, passcode: $passcode) { success message } }',
-                                variables: {
-                                    email: hiddenEmailInput.value,
-                                    passcode: passcodeInput.value
-                                }
-                            }
-                            : {
-                                query: 'mutation SendQtsCode($email: String!) { sendQtsCode(email: $email) { success message } }',
-                                variables: {
-                                    email: emailInput.value
-                                }
-                            }
-                    )
-                });
-
-                const payload = await response.json();
-
-                if (payload.errors && payload.errors.length) {
-                    if (isPasscodeStep) {
-                        restoreEmailStep();
-                    }
-                    renderMessage(payload.errors[0].message, 'message-error error');
-                    return;
-                }
-
-                if (isPasscodeStep) {
-                    renderMessage(payload.data.loginWithOts.message, 'message-success success');
-                    window.location.href = accountUrl;
-                    return;
-                }
-
-                renderMessage(payload.data.sendQtsCode.message, 'message-success success');
-                switchToPasscodeStep(emailInput.value);
-            } catch (error) {
-                if (!isPasscodeStep) {
-                    restoreEmailStep();
-                }
-                renderMessage('<?= $block->escapeJs(__('Unable to request a one time code right now.')) ?>', 'message-error error');
-            } finally {
-                submitButton.disabled = false;
-            }
-        });
-    });
+<script type="text/x-magento-init">
+{
+    "#ots-request-form": {
+        "hmhOtsLogin": {}
+    }
+}
 </script>
