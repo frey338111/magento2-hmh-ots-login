@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Hmh\OtsLogin\Api\OtsRequestRepositoryInterface"
+                type="Hmh\OtsLogin\Model\OtsRequestRepository"/>
+    <preference for="Hmh\OtsLogin\Api\Data\OtsRequestSearchResultsInterface"
+                type="Hmh\OtsLogin\Model\OtsRequestSearchResults"/>
+    <type name="Hmh\OtsLogin\Model\Config\Source\CommunicationMethods">
+        <arguments>
+            <argument name="methods" xsi:type="array">
+                <item name="email" xsi:type="string">Email</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Hmh\OtsLogin\Model\Service\SendOtsCode">
+        <arguments>
+            <argument name="communicationMethods" xsi:type="array">
+                <item name="email" xsi:type="object">Hmh\OtsLogin\Model\Service\Communication\Email</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

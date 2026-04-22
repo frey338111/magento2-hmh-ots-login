@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <hmh_otslogin>
+            <general>
+                <communication_methods>email</communication_methods>
+            </general>
+            <email>
+                <sender>general</sender>
+            </email>
+        </hmh_otslogin>
+    </default>
+</config>

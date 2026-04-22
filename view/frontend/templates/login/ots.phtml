@@ -1,0 +1,23 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+?>
+<div class="block block-new-customer block-ots-login">
+    <div class="block-title">
+        <strong id="block-ots-login-heading" role="heading" aria-level="2">
+            <?= $block->escapeHtml(__('One Time Code Login')) ?>
+        </strong>
+    </div>
+    <div class="block-content" aria-labelledby="block-ots-login-heading">
+        <p><?= $block->escapeHtml(__('Login with One Time Code.')) ?></p>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <a href="<?= $block->escapeUrl($block->getUrl('otslogin/account/login')) ?>"
+                   class="action create primary">
+                    <span><?= $block->escapeHtml(__('Login with One Time Code')) ?></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

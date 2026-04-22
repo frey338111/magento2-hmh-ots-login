@@ -1,0 +1,16 @@
+type SendQtsCodeOutput {
+    success: Boolean!
+    message: String!
+}
+
+type LoginWithOtsOutput {
+    success: Boolean!
+    message: String!
+}
+
+type Mutation {
+    sendQtsCode(email: String!): SendQtsCodeOutput!
+        @resolver(class: "Hmh\\OtsLogin\\Model\\Resolver\\SendQtsCode")
+    loginWithOts(email: String!, passcode: String!): LoginWithOtsOutput!
+        @resolver(class: "Hmh\\OtsLogin\\Model\\Resolver\\LoginWithOts")
+}
