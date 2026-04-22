@@ -1,0 +1,90 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+?>
+<div class="max-w-xl">
+    <div class="messages hidden" id="ots-request-messages"></div>
+    <div class="card block-ots-request">
+        <div aria-labelledby="block-ots-request-heading">
+            <div class="form form-login"
+                 id="ots-request-form"
+                 data-ots-login='{
+                     "graphQlUrl":"<?= $block->escapeHtmlAttr($block->getUrl('graphql')) ?>",
+                     "accountUrl":"<?= $block->escapeHtmlAttr($block->getUrl('customer/account')) ?>",
+                     "emailStepNote":"<?= $block->escapeHtmlAttr(__('Enter your email address to receive a one time code.')) ?>",
+                     "passcodeStepNote":"<?= $block->escapeHtmlAttr(__('Enter the passcode sent to your email address.')) ?>",
+                     "getCodeLabel":"<?= $block->escapeHtmlAttr(__('Get Code')) ?>",
+                     "loginLabel":"<?= $block->escapeHtmlAttr(__('Login with Passcode')) ?>",
+                     "requestErrorMessage":"<?= $block->escapeHtmlAttr(__('Unable to request a one time code right now.')) ?>"
+                 }'>
+                <?= $block->getBlockHtml('formkey') ?>
+                <fieldset class="fieldset login">
+                    <legend class="mb-3">
+                        <h2 class="text-xl font-medium title-font" id="block-ots-request-heading">
+                            <?= $block->escapeHtml(__('Login with One Time Code')) ?>
+                        </h2>
+                    </legend>
+                    <p class="mb-8 field note" id="ots-form-note">
+                        <?= $block->escapeHtml(__('Enter your email address to receive a one time code.')) ?>
+                    </p>
+                    <div class="field email required" id="ots-email-field">
+                        <label class="label" for="ots-email">
+                            <span><?= $block->escapeHtml(__('Email Address')) ?></span>
+                        </label>
+                        <div class="control">
+                            <input name="email"
+                                   id="ots-email"
+                                   type="email"
+                                   class="form-input w-full md:max-w-lg"
+                                   title="<?= $block->escapeHtmlAttr(__('Email Address')) ?>"
+                                   data-validate="{required:true, 'validate-email':true}">
+                        </div>
+                    </div>
+                    <input type="hidden" name="submitted_email" id="ots-submitted-email" value="">
+                    <div class="field password required hidden" id="ots-passcode-field">
+                        <label class="label" for="ots-passcode">
+                            <span><?= $block->escapeHtml(__('Passcode')) ?></span>
+                        </label>
+                        <div class="control">
+                            <input name="passcode"
+                                   id="ots-passcode"
+                                   type="password"
+                                   class="form-input w-full md:max-w-lg"
+                                   title="<?= $block->escapeHtmlAttr(__('Passcode')) ?>">
+                        </div>
+                    </div>
+                    <div class="actions-toolbar pt-6 pb-2 flex justify-start">
+                        <button type="button"
+                                class="btn btn-primary"
+                                name="send"
+                                id="send-ots-code">
+                            <span id="ots-submit-label"><?= $block->escapeHtml(__('Get Code')) ?></span>
+                        </button>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="<?= $block->escapeUrl($block->getViewFileUrl('Hmh_OtsLogin::js/hyva/account/login.js')) ?>"></script>
+<script>
+    (() => {
+        const init = () => {
+            const form = document.getElementById('ots-request-form');
+
+            if (!form || typeof window.initHmhOtsLogin !== 'function' || form.dataset.otsInitialized === 'true') {
+                return;
+            }
+
+            window.initHmhOtsLogin(form);
+            form.dataset.otsInitialized = 'true';
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init, { once: true });
+        } else {
+            init();
+        }
+    })();
+</script>

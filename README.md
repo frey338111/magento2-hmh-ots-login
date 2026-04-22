@@ -6,6 +6,7 @@ The module provides:
 
 - a storefront entry point on the customer login page
 - an OTS login page where the customer requests a code by email
+- separate Luma and Hyva storefront implementations in the same module
 - GraphQL mutations to request and consume the code
 - admin configuration for enablement, passcode validity, communication methods, and email sender
 - repeat-request protection to avoid resending a code within five minutes
@@ -59,6 +60,23 @@ The email content uses the transactional template declared in `etc/email_templat
 4. The module creates an OTS request and sends the code by email.
 5. If a request already exists for the same customer within the last five minutes, no new code is sent and the user is told to wait.
 6. The customer submits the code and is logged in.
+
+## Theme Support
+
+The module now ships both theme variants in one codebase:
+
+- `view/frontend/templates/luma/*` and `view/frontend/web/js/luma/*` for the default Magento storefront
+- `view/frontend/templates/hyva/*` and `view/frontend/web/js/hyva/*` for Hyva
+
+Magento loads the default handles for Luma:
+
+- `customer_account_login.xml`
+- `otslogin_account_login.xml`
+
+Hyva-specific overrides are loaded through Hyva-prefixed handles:
+
+- `hyva_customer_account_login.xml`
+- `hyva_otslogin_account_login.xml`
 
 ## Screenshots
 

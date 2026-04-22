@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <title>Login with One Time Code</title>
-    </head>
     <body>
         <referenceContainer name="content">
             <block class="Magento\Framework\View\Element\Template"
-                   name="hmh.otslogin.account.login"
-                   template="Hmh_OtsLogin::luma/account/login.phtml"/>
+                   name="hmh.otslogin.login"
+                   template="Hmh_OtsLogin::hyva/login/ots.phtml"
+                   ifconfig="hmh_otslogin/general/enable"
+                   after="customer.login.container"/>
         </referenceContainer>
     </body>
 </page>

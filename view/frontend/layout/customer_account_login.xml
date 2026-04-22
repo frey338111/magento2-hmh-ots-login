@@ -5,7 +5,7 @@
         <referenceContainer name="customer.login.container">
             <block class="Magento\Framework\View\Element\Template"
                    name="hmh.otslogin.login"
-                   template="Hmh_OtsLogin::login/ots.phtml"
+                   template="Hmh_OtsLogin::luma/login/ots.phtml"
                    ifconfig="hmh_otslogin/general/enable"
                    after="customer.new"/>
         </referenceContainer>

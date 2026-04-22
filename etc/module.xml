@@ -3,10 +3,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Hmh_OtsLogin">
         <sequence>
-            <module name="Hmh_Core"/>
             <module name="Magento_Customer"/>
             <module name="Magento_GraphQl"/>
             <module name="Magento_Store"/>
+            <module name="Hyva_CompatModuleFallback"/>
+            <module name="Hyva_Theme"/>
+            <module name="Hmh_Core"/>
         </sequence>
     </module>
 </config>

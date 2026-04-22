@@ -1,0 +1,23 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ */
+?>
+<div class="block-ots-login card w-full md:w-1/2">
+    <div class="block-title">
+        <h2 class="text-xl font-medium title-font mb-3" role="heading" aria-level="2">
+            <?= $block->escapeHtml(__('One Time Code Login')) ?>
+        </h2>
+    </div>
+    <div class="block-content" aria-labelledby="block-ots-login-heading">
+        <p>
+            <?= $block->escapeHtml(__('Login with One Time Code.')) ?>
+        </p>
+    </div>
+    <div class="actions-toolbar pt-6 pb-2 flex justify-start">
+        <a href="<?= $block->escapeUrl($block->getUrl('otslogin/account/login')) ?>"
+           class="btn btn-primary">
+            <span><?= $block->escapeHtml(__('Login with One Time Code')) ?></span>
+        </a>
+    </div>
+</div>
