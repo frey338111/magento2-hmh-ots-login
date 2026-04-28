@@ -61,6 +61,10 @@ The email content uses the transactional template declared in `etc/email_templat
 5. If a request already exists for the same customer within the last five minutes, no new code is sent and the user is told to wait.
 6. The customer submits the code and is logged in.
 
+The repeat-request protection appears on the storefront when the customer asks for another code too soon:
+
+![Five-minute interval message](img/5-min-interval-to-request-code.png)
+
 ## Theme Support
 
 The module now ships both theme variants in one codebase:
@@ -92,6 +96,11 @@ Hyva-specific overrides are loaded through Hyva-prefixed handles:
 
 ![Email with code](img/email-with-code.png)
 
+### Five-Minute Request Interval
+
+![Five-minute request interval](img/5-min-interval-to-request-code.png)
+
 ### Login With Code
 
 ![Login with code](img/login-with-code.png)
+
