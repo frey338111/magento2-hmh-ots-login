@@ -12,7 +12,9 @@ class ConfigProvider
     public const XML_PATH_ENABLE = 'hmh_otslogin/general/enable';
     public const XML_PATH_PASSCODE_VALID_PERIOD = 'hmh_otslogin/general/passcode_valid_period';
     public const XML_PATH_COMMUNICATION_METHODS = 'hmh_otslogin/general/communication_methods';
+    public const XML_PATH_RESEND_TIMEOUT_SECONDS = 'hmh_otslogin/general/resend_timeout_seconds';
     public const XML_PATH_EMAIL_SENDER = 'hmh_otslogin/email/sender';
+    private const DEFAULT_RESEND_TIMEOUT_SECONDS = 300;
 
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig
@@ -50,6 +52,17 @@ class ConfigProvider
         }
 
         return array_values(array_filter(array_map('trim', explode(',', $value))));
+    }
+
+    public function getResendTimeoutSeconds(?int $storeId = null): int
+    {
+        $value = (int) $this->scopeConfig->getValue(
+            self::XML_PATH_RESEND_TIMEOUT_SECONDS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        return $value > 0 ? $value : self::DEFAULT_RESEND_TIMEOUT_SECONDS;
     }
 
     public function getEmailSender(?int $storeId = null): string

@@ -4,6 +4,7 @@
     <default>
         <hmh_otslogin>
             <general>
+                <resend_timeout_seconds>300</resend_timeout_seconds>
                 <communication_methods>email</communication_methods>
             </general>
             <email>

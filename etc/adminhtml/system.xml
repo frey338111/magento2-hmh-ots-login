@@ -28,6 +28,14 @@
                         <field id="enable">1</field>
                     </depends>
                 </field>
+                <field id="resend_timeout_seconds" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Resend Timeout Seconds</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <comment>Countdown duration in seconds before the resend button is shown.</comment>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
             </group>
             <group id="email" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Email</label>

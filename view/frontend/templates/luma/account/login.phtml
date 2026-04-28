@@ -11,18 +11,20 @@
         </strong>
     </div>
     <div class="block-content" aria-labelledby="block-ots-request-heading">
-        <div class="form form-login"
-             id="ots-request-form"
-             data-ots-login='{
+        <form class="form form-login"
+              id="ots-request-form"
+              data-ots-login='{
                  "graphQlUrl":"<?= $block->escapeHtmlAttr($block->getUrl('graphql')) ?>",
                  "accountUrl":"<?= $block->escapeHtmlAttr($block->getUrl('customer/account')) ?>",
                  "emailStepNote":"<?= $block->escapeHtmlAttr(__('Enter your email address to receive a one time code.')) ?>",
                  "passcodeStepNote":"<?= $block->escapeHtmlAttr(__('Enter the passcode sent to your email address.')) ?>",
                  "getCodeLabel":"<?= $block->escapeHtmlAttr(__('Get Code')) ?>",
+                 "getAnotherCodeCountdownLabel":"<?= $block->escapeHtmlAttr(__('Resend code in %1 mins and %2 seconds')) ?>",
+                 "resendTimeoutSeconds":<?= (int) $block->getResendTimeoutSeconds() ?>,
                  "loginLabel":"<?= $block->escapeHtmlAttr(__('Login with Passcode')) ?>",
                  "requestErrorMessage":"<?= $block->escapeHtmlAttr(__('Unable to request a one time code right now.')) ?>"
              }'
-             data-mage-init='{"validation":{}}'>
+              data-mage-init='{"validation":{}}'>
             <?= $block->getBlockHtml('formkey') ?>
             <fieldset class="fieldset login" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>">
                 <div class="field note" id="ots-form-note">
@@ -32,7 +34,7 @@
                     <label class="label" for="ots-email">
                         <span><?= $block->escapeHtml(__('Email Address')) ?></span>
                     </label>
-                    <div class="control" style="max-width: 32rem;">
+                    <div class="control" style="max-width: 44rem;">
                         <input name="email"
                                id="ots-email"
                                type="email"
@@ -47,7 +49,7 @@
                     <label class="label" for="ots-passcode">
                         <span><?= $block->escapeHtml(__('Passcode')) ?></span>
                     </label>
-                    <div class="control" style="max-width: 32rem;">
+                    <div class="control" style="max-width: 44rem;">
                         <input name="passcode"
                                id="ots-passcode"
                                type="password"
@@ -56,7 +58,13 @@
                                data-mage-init='{"mage/trim-input":{}}'>
                     </div>
                 </div>
-                <div class="actions-toolbar">
+                <div class="actions-toolbar" id="ots-actions-toolbar" style="max-width: 44rem;">
+                    <div class="secondary" id="ots-resend-code-action" style="display: none;">
+                        <span id="ots-resend-countdown"></span>
+                        <button type="button" class="action secondary" name="resend" id="resend-ots-code" style="display: none;">
+                            <span><?= $block->escapeHtml(__('Resend')) ?></span>
+                        </button>
+                    </div>
                     <div class="primary">
                         <button type="button" class="action login primary" name="send" id="send-ots-code">
                             <span id="ots-submit-label"><?= $block->escapeHtml(__('Get Code')) ?></span>
@@ -64,7 +72,7 @@
                     </div>
                 </div>
             </fieldset>
-        </div>
+        </form>
     </div>
 </div>
 <script type="text/x-magento-init">

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hmh\OtsLogin\Model\Resolver;
 
+use Hmh\OtsLogin\Model\Resolver\Validator\OtsLoginInputValidator;
 use Hmh\OtsLogin\Model\Service\SendOtsCode as SendOtsCodeService;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -13,20 +14,19 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class SendQtsCode implements ResolverInterface
 {
     public function __construct(
-        private readonly SendOtsCodeService $sendOtsCodeService
+        private readonly SendOtsCodeService $sendOtsCodeService,
+        private readonly OtsLoginInputValidator $inputValidator
     ) {
     }
 
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): array
     {
         $email = trim((string)($args['email'] ?? ''));
+        $formKey = trim((string)($args['formKey'] ?? ''));
 
-        if ($email === '') {
-            throw new GraphQlInputException(__('Specify the "email" value.'));
-        }
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new GraphQlInputException(__('The email address has an invalid format.'));
+        if (!$this->inputValidator->isValid(['email' => $email, 'formKey' => $formKey])) {
+            $messages = $this->inputValidator->getMessages();
+            throw new GraphQlInputException(current($messages) ?: __('Invalid request.'));
         }
 
         return [

@@ -6,7 +6,7 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template"
+            <block class="Hmh\OtsLogin\Block\Account\Login"
                    name="hmh.otslogin.account.login"
                    template="Hmh_OtsLogin::luma/account/login.phtml"/>
         </referenceContainer>

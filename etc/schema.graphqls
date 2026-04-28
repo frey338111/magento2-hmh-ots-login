@@ -9,8 +9,8 @@ type LoginWithOtsOutput {
 }
 
 type Mutation {
-    sendQtsCode(email: String!): SendQtsCodeOutput!
+    sendQtsCode(email: String!, formKey: String!): SendQtsCodeOutput!
         @resolver(class: "Hmh\\OtsLogin\\Model\\Resolver\\SendQtsCode")
-    loginWithOts(email: String!, passcode: String!): LoginWithOtsOutput!
+    loginWithOts(email: String!, passcode: String!, formKey: String!): LoginWithOtsOutput!
         @resolver(class: "Hmh\\OtsLogin\\Model\\Resolver\\LoginWithOts")
 }
